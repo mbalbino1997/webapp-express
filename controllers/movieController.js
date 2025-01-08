@@ -9,6 +9,27 @@ function index(req, res) {
 }
 
 function show(req, res) {
+    const id = req.params.id;
+    const sqlMovie = `SELECT * FROM movies WHERE id = ?`;
+    const sqlReviews = `SELECT * FROM reviews WHERE movie_id = ?`;
+    let avgScore = 0;
+    connection.query(sqlMovie, [id], (err, results) => {
+        if (err) return res.status(500).json({ error: "Database query failed" });
+        if (results.length === 0) return res.status(404).json({ error: "Movie not found" });
+        const movie = results[0];
+
+        connection.query(sqlReviews, [id], (err, results) => {
+            if (err) return res.status(500).json({ error: "Database query failed" });
+            results.forEach((el) => {
+                avgScore += parseInt(el.vote)
+            })
+            avgScore = avgScore / results.length;
+            movie.avg_score = avgScore.toFixed(2);
+            movie.reviews = results;
+            res.json(movie);
+
+        });
+    });
 
 }
 

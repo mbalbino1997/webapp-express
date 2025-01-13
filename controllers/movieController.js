@@ -4,7 +4,7 @@ function index(req, res) {
     const params = [];
     if (req.params.title) {
         sql += " where title like ?"
-        params.push(`%${req.params.title}%`)
+        params.push(`'%${req.params.title}%'`)
     }
     sql += " group by r.movie_id"
     connection.query(sql, params, (err, results) => {
@@ -38,4 +38,8 @@ function show(req, res) {
 
 }
 
-module.exports = { index, show }
+function postReview(req, res) {
+
+}
+
+module.exports = { index, show, postReview }

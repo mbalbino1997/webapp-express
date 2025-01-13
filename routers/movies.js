@@ -5,4 +5,6 @@ router.get("/", movieController.index)
 
 router.get("/:id", movieController.show)
 
+router.post("/reviews/:id", movieController.postReview)
+
 module.exports = router;

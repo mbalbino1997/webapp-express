@@ -3,9 +3,10 @@ function index(req, res) {
     let sql = "select m.*, avg(vote) as avg_vote from movies as m inner join reviews as r on m.id=r.movie_id";
     const params = [];
     if (req.params.title) {
-        sql += "where title like '%?%'"
+        sql += " where title like ?"
+        params.push(`%${req.params.title}%`)
     }
-    sql += "group by r.movie_id"
+    sql += " group by r.movie_id"
     connection.query(sql, params, (err, results) => {
         if (err) return res.status(500).json({ error: "Database query failed" });
         res.json(results);

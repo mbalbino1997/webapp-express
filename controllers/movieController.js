@@ -2,9 +2,9 @@ const connection = require("../data/db");
 function index(req, res) {
     let sql = "select m.*, avg(vote) as avg_vote from movies as m inner join reviews as r on m.id=r.movie_id";
     const params = [];
-    if (req.params.title) {
+    if (req.query.title) {
         sql += " where title like ?"
-        params.push(`'%${req.params.title}%'`)
+        params.push(`%${req.query.title}%`)
     }
     sql += " group by r.movie_id"
     connection.query(sql, params, (err, results) => {

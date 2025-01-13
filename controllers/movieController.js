@@ -39,6 +39,8 @@ function show(req, res) {
 }
 
 function postReview(req, res) {
+    const id = req.params.id;
+    const { name, vote, text } = req.body
 
 }
 

@@ -41,6 +41,23 @@ function show(req, res) {
 function postReview(req, res) {
     const id = req.params.id;
     const { name, vote, text } = req.body
+    if (!name.trim() || typeof vote !== "number" || vote < 1 || vote > 5) {
+        return res.status(400).json({ error: "Invalid or missing data" });
+    }
+    const sql = "INSERT INTO reviews (movie_id, name, vote, text) VALUES (?, ?, ?, ?)";
+
+    connection.query(sql, [id, name, vote, text], (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({ error: "Database query failed" });
+        }
+        res.status(201).json({
+            message: "Review added successfully",
+            reviewId: results.insertId
+        })
+    })
+
+
 
 }
 
